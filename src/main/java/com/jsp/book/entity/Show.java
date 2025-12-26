@@ -1,6 +1,8 @@
+
 package com.jsp.book.entity;
 
-import java.util.ArrayList;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 import jakarta.persistence.CascadeType;
@@ -11,19 +13,24 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 import lombok.Data;
 
 @Entity
 @Data
-public class Screen {
+@Table(name = "movieshow")
+public class Show {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
-	private String name;
-	private String type;
-
+	private long id;
+	private LocalDate showDate;
+	private LocalTime startTime;
+	private LocalTime endTime;
 	@ManyToOne
-	private Theater theater;
-
-	
+	private Movie movie;
+	private Double ticketPrice;
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private List<ShowSeat> seats;
+	@ManyToOne
+	private Screen screen;
 }

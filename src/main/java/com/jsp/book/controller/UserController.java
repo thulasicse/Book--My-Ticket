@@ -1,6 +1,7 @@
 package com.jsp.book.controller;
 
 import java.io.IOException;
+import java.time.LocalDate;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -12,8 +13,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.jsp.book.dto.LoginDto;
+import com.jsp.book.dto.MovieDto;
 import com.jsp.book.dto.PasswordDto;
 import com.jsp.book.dto.ScreenDto;
+import com.jsp.book.dto.SeatLayoutForm;
+import com.jsp.book.dto.ShowDto;
 import com.jsp.book.dto.TheaterDto;
 import com.jsp.book.dto.UserDto;
 import com.jsp.book.service.UserService;
@@ -29,8 +33,8 @@ public class UserController {
 	private final UserService userService;
 
 	@GetMapping({ "/", "/main" })
-	public String loadMain() {
-		return "main.html";
+	public String loadMain(ModelMap map) {
+		return userService.loadMain(map);
 	}
 
 	@GetMapping("/register")
@@ -137,7 +141,7 @@ public class UserController {
 
 	@PostMapping("/update-theater")
 	public String updateTheater(@Valid TheaterDto theaterDto, BindingResult result, RedirectAttributes attributes,
-			HttpSession session, @RequestParam("id") Long id) throws IOException {
+			HttpSession session, @RequestParam Long id) throws IOException {
 		return userService.updateTheater(session, attributes, theaterDto, result, id);
 	}
 
@@ -179,9 +183,79 @@ public class UserController {
 	public String manageSeats(@PathVariable Long id, HttpSession session, ModelMap map, RedirectAttributes attributes) {
 		return userService.manageSeats(id, session, map, attributes);
 	}
-	
+
 	@GetMapping("/add-seats/{id}")
 	public String addSeats(@PathVariable Long id, HttpSession session, ModelMap map, RedirectAttributes attributes) {
 		return userService.addSeats(id, session, map, attributes);
+	}
+
+	@PostMapping("/add-seats/{id}")
+	public String saveSeats(@PathVariable Long id, SeatLayoutForm seatLayoutForm, HttpSession session,
+			RedirectAttributes attributes) {
+		return userService.saveSeats(id, seatLayoutForm, session, attributes);
+	}
+
+	@GetMapping("/manage-movies")
+	public String manageMovies(HttpSession session, RedirectAttributes attributes, ModelMap map) {
+		return userService.manageMovies(session, attributes, map);
+	}
+
+	@GetMapping("/add-movie")
+	public String loadAddMovie(MovieDto movieDto, RedirectAttributes attributes, HttpSession session) {
+		return userService.loadAddMovie(movieDto, attributes, session);
+	}
+
+	@PostMapping("/add-movie")
+	public String addMovie(@Valid MovieDto movieDto, BindingResult result, RedirectAttributes attributes,
+			HttpSession session) {
+		return userService.addMovie(movieDto, result, attributes, session);
+	}
+
+	@GetMapping("/delete-movie/{id}")
+	public String deleteMovie(@PathVariable Long id, HttpSession session, RedirectAttributes attributes) {
+		return userService.deleteMovie(id, session, attributes);
+	}
+
+	@GetMapping("/manage-shows/{id}")
+	public String manageShows(@PathVariable Long id, ModelMap map, RedirectAttributes attributes, HttpSession session) {
+		return userService.manageShows(id, map, attributes, session);
+	}
+
+	@GetMapping("/add-show/{id}")
+	public String addShow(@PathVariable Long id, ModelMap map, RedirectAttributes attributes, HttpSession session) {
+		return userService.addShow(id, map, attributes, session);
+	}
+
+	@PostMapping("/add-show")
+	public String addShow(@Valid ShowDto showDto, BindingResult result, RedirectAttributes attributes,
+			HttpSession session, ModelMap map) {
+		return userService.addShow(showDto, result, attributes, session, map);
+	}
+
+	@GetMapping("/book/movie/{id}")
+	public String bookMovie(@PathVariable Long id, HttpSession session, RedirectAttributes attributes, ModelMap map) {
+		return userService.bookMovie(id, session, attributes, map);
+	}
+
+	@GetMapping("/delete-show/{id}")
+	public String deleteShow(@PathVariable Long id, RedirectAttributes attributes, HttpSession session) {
+		return userService.deleteShow(id, session, attributes);
+	}
+
+	@GetMapping("/selectShows")
+	public String displayShows(@RequestParam Long movieId, @RequestParam LocalDate date, RedirectAttributes attributes,
+			ModelMap map) {
+		return userService.displayShowsOnDate(date, movieId, attributes, map);
+	}
+
+	@GetMapping("/show-seats/{id}")
+	public String showSeats(@PathVariable Long id, HttpSession session, RedirectAttributes attributes, ModelMap map) {
+		return userService.showSeats(id, session, attributes, map);
+	}
+
+	@PostMapping("/confirm-booking")
+	public String confirmBooking(@RequestParam Long showId, @RequestParam Long[] seatIds, HttpSession session,
+			ModelMap map, RedirectAttributes attributes) {
+		return userService.confirmBooking(showId, seatIds, session, map, attributes);
 	}
 }

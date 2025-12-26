@@ -1,15 +1,18 @@
-
 package com.jsp.book.service;
 
 import java.io.IOException;
+import java.time.LocalDate;
 
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.jsp.book.dto.LoginDto;
+import com.jsp.book.dto.MovieDto;
 import com.jsp.book.dto.PasswordDto;
 import com.jsp.book.dto.ScreenDto;
+import com.jsp.book.dto.SeatLayoutForm;
+import com.jsp.book.dto.ShowDto;
 import com.jsp.book.dto.TheaterDto;
 import com.jsp.book.dto.UserDto;
 
@@ -61,10 +64,39 @@ public interface UserService {
 
 	String editScreen(Long id, HttpSession session, RedirectAttributes attributes, ModelMap map);
 
-	String updateScreen(@Valid ScreenDto screenDto, Long id, BindingResult result, HttpSession session,
+	String updateScreen(ScreenDto screenDto, Long id, BindingResult result, HttpSession session,
 			RedirectAttributes attributes, ModelMap map);
 
 	String manageSeats(Long id, HttpSession session, ModelMap map, RedirectAttributes attributes);
 
 	String addSeats(Long id, HttpSession session, ModelMap map, RedirectAttributes attributes);
+
+	String manageMovies(HttpSession session, RedirectAttributes attributes, ModelMap map);
+
+	String loadAddMovie(MovieDto movieDto, RedirectAttributes attributes, HttpSession session);
+
+	String addMovie(MovieDto movieDto, BindingResult result, RedirectAttributes attributes, HttpSession session);
+
+	String saveSeats(Long id, SeatLayoutForm seatLayoutForm, HttpSession session, RedirectAttributes attributes);
+
+	String manageShows(Long id, ModelMap map, RedirectAttributes attributes, HttpSession session);
+
+	String addShow(Long id, ModelMap map, RedirectAttributes attributes, HttpSession session);
+
+	String addShow(ShowDto showDto, BindingResult result, RedirectAttributes attributes, HttpSession session, ModelMap map);
+
+	String loadMain(ModelMap map);
+
+	String bookMovie(Long id, HttpSession session, RedirectAttributes attributes, ModelMap map);
+
+	String deleteShow(Long id, HttpSession session, RedirectAttributes attributes);
+
+	String deleteMovie(Long id, HttpSession session, RedirectAttributes attributes);
+
+	String displayShowsOnDate(LocalDate date, Long movieId, RedirectAttributes attributes, ModelMap map);
+
+	String showSeats(Long id,HttpSession session ,RedirectAttributes attributes, ModelMap map);
+
+	String confirmBooking(Long showId, Long[] seatIds, HttpSession session, ModelMap map,
+			RedirectAttributes attributes);
 }
